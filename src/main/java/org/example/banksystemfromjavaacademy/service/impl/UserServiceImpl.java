@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                 .responseMessage(AccountUtils.ACCOUNT_CREATION_MESSAGE)
                 .accountInfo(AccountInfo.builder()
                         .accountNumber(savedUser.getAccountNumber())
-                        .accountBalance(String.valueOf(savedUser.getAccountBalance()))
+                        .accountBalance(savedUser.getAccountBalance())
                         .accountName(savedUser.getFirstName() + " " + savedUser.getLastName() + savedUser.getOtherName())
                         .build())
                 .build();
