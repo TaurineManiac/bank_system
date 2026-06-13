@@ -6,13 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class AccountInfo {
-    private String accountName;
+    private UUID publicAccountId;
     private BigDecimal accountBalance;
-    private String accountNumber;
+    private String accountType;
+    private UUID publicUserId;
+    private String accountStatus;
 }
