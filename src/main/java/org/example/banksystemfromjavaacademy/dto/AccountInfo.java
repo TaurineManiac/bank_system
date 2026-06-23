@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AccountInfo {
+public class AccountInfo implements BankInfo {
     private UUID publicAccountId;
     private BigDecimal accountBalance;
     private String accountType;
