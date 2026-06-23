@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BankResponse {
+public class BankResponse<T extends BankInfo> {
     private String responseCode;
     private String responseMessage;
-    private AccountInfo accountInfo;
+    private T data;
 }
