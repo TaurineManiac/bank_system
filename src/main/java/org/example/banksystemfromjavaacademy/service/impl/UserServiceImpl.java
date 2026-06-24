@@ -2,10 +2,13 @@ package org.example.banksystemfromjavaacademy.service.impl;
 
 import org.example.banksystemfromjavaacademy.dto.AccountInfo;
 import org.example.banksystemfromjavaacademy.dto.BankResponse;
+import org.example.banksystemfromjavaacademy.dto.UserInfo;
 import org.example.banksystemfromjavaacademy.dto.UserRequest;
 import org.example.banksystemfromjavaacademy.entity.User;
+import org.example.banksystemfromjavaacademy.enums.AccountResponseConstants;
+import org.example.banksystemfromjavaacademy.enums.UserResponseConstants;
 import org.example.banksystemfromjavaacademy.repository.UserRepository;
-import org.example.banksystemfromjavaacademy.utils.AccountUtils;
+import org.example.banksystemfromjavaacademy.utils.BankUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,31 +24,30 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-    public BankResponse createAccount(UserRequest userRequest) {
+    public BankResponse createUser(UserRequest userRequest) {
         /**
-         * Creating an account - saving a new user into DB
+         * Creating User - saving a new user into DB
          * Next step is check if User already exist.
          */
 
         if(userRepository.existsByEmail(userRequest.getEmail())) {
             return BankResponse.builder()
-                    .responseCode(AccountUtils.ACCOUNT_EXISTS_CODE)
-                    .responseMessage(AccountUtils.ACCOUNT_EXISTS_MESSAGE)
-                    .accountInfo(null)
+                    .responseCode(UserResponseConstants.USER_ALREADY_EXISTS.getResponseCode())
+                    .responseMessage(UserResponseConstants.USER_ALREADY_EXISTS.getResponseMessage())
+                    .data(null)
                     .build();
         }
 
 
 
         User newUser = User.builder()
+                .publicUserId(BankUtils.generatePublicId())   // UUIDv7
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .otherName(userRequest.getOtherName())
                 .gender(userRequest.getGender())
                 .address(userRequest.getAddress())
                 .stateOfOrigin(userRequest.getStateOfOrigin())
-                .accountNumber(AccountUtils.generateAccountNumber())
-                .accountBalance(BigDecimal.ZERO)
                 .email(userRequest.getEmail())
                 .phoneNumber(userRequest.getPhoneNumber())
                 .alternativePhoneNumber(userRequest.getAlternativePhoneNumber())
@@ -55,12 +57,20 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(newUser);
 
         return BankResponse.builder()
-                .responseCode(AccountUtils.ACCOUNT_CREATION_SUCCESS)
-                .responseMessage(AccountUtils.ACCOUNT_CREATION_MESSAGE)
-                .accountInfo(AccountInfo.builder()
-                        .accountNumber(savedUser.getAccountNumber())
-                        .accountBalance(savedUser.getAccountBalance())
-                        .accountName(savedUser.getFirstName() + " " + savedUser.getLastName() + savedUser.getOtherName())
+                .responseCode(UserResponseConstants.USER_CREATION_SUCCESS.getResponseCode())
+                .responseMessage(UserResponseConstants.USER_CREATION_SUCCESS.getResponseMessage())
+                .data(UserInfo.builder()
+                        .publicUserId(savedUser.getPublicUserId())               // UUID
+                        .firstName(savedUser.getFirstName())                     // String
+                        .lastName(savedUser.getLastName())                       // String
+                        .otherName(savedUser.getOtherName())                     // String
+                        .gender(savedUser.getGender())                           // String
+                        .address(savedUser.getAddress())                         // String
+                        .stateOfOrigin(savedUser.getStateOfOrigin())             // String
+                        .email(savedUser.getEmail())                             // String
+                        .phoneNumber(savedUser.getPhoneNumber())                 // String
+                        .alternativePhoneNumber(savedUser.getAlternativePhoneNumber()) // String
+                        .status(savedUser.getStatus())                           // String
                         .build())
                 .build();
     }
