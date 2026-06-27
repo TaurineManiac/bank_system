@@ -7,6 +7,7 @@ import org.example.banksystemfromjavaacademy.dto.UserRequest;
 import org.example.banksystemfromjavaacademy.entity.User;
 import org.example.banksystemfromjavaacademy.enums.AccountResponseConstants;
 import org.example.banksystemfromjavaacademy.enums.UserResponseConstants;
+import org.example.banksystemfromjavaacademy.exceptions.UserAlreadyExistsException;
 import org.example.banksystemfromjavaacademy.repository.UserRepository;
 import org.example.banksystemfromjavaacademy.utils.BankUtils;
 import org.springframework.stereotype.Service;
@@ -32,11 +33,7 @@ public class UserServiceImpl implements UserService {
          */
 
         if(userRepository.existsByEmail(userRequest.getEmail())) {
-            return BankResponse.builder()
-                    .responseCode(UserResponseConstants.USER_ALREADY_EXISTS.getCode())
-                    .responseMessage(UserResponseConstants.USER_ALREADY_EXISTS.getMessage())
-                    .data(null)
-                    .build();
+            throw new UserAlreadyExistsException(UserResponseConstants.USER_ALREADY_EXISTS);
         }
 
 
