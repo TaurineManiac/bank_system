@@ -1,4 +1,4 @@
-package org.example.banksystemfromjavaacademy.exceptions;
+package org.example.banksystemfromjavaacademy.enums;
 
 import org.springframework.http.HttpStatus;
 
