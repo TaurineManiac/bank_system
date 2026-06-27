@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -32,8 +33,8 @@ public class UserServiceImpl implements UserService {
 
         if(userRepository.existsByEmail(userRequest.getEmail())) {
             return BankResponse.builder()
-                    .responseCode(UserResponseConstants.USER_ALREADY_EXISTS.getResponseCode())
-                    .responseMessage(UserResponseConstants.USER_ALREADY_EXISTS.getResponseMessage())
+                    .responseCode(UserResponseConstants.USER_ALREADY_EXISTS.getCode())
+                    .responseMessage(UserResponseConstants.USER_ALREADY_EXISTS.getMessage())
                     .data(null)
                     .build();
         }
@@ -52,13 +53,15 @@ public class UserServiceImpl implements UserService {
                 .phoneNumber(userRequest.getPhoneNumber())
                 .alternativePhoneNumber(userRequest.getAlternativePhoneNumber())
                 .status("ACTIVE")
+                .creationDate(LocalDateTime.now())
+                .modificationDate(LocalDateTime.now())
                 .build();
 
         User savedUser = userRepository.save(newUser);
 
         return BankResponse.builder()
-                .responseCode(UserResponseConstants.USER_CREATION_SUCCESS.getResponseCode())
-                .responseMessage(UserResponseConstants.USER_CREATION_SUCCESS.getResponseMessage())
+                .responseCode(UserResponseConstants.USER_CREATION_SUCCESS.getCode())
+                .responseMessage(UserResponseConstants.USER_CREATION_SUCCESS.getMessage())
                 .data(UserInfo.builder()
                         .publicUserId(savedUser.getPublicUserId())               // UUID
                         .firstName(savedUser.getFirstName())                     // String
