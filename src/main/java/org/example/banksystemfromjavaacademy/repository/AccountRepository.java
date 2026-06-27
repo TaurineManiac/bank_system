@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface AccountRepository extends JpaRepository<Account,Long> {
     List<Account> findByUser_PublicUserId(UUID publicUserId);
     Optional<Account> findByPublicAccountId(UUID publicAccountId);
-
+    Boolean existsByPublicAccountId(UUID publicAccountId);
 }
