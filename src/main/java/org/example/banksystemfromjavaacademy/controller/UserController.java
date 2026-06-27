@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/create_user")
-    public ResponseEntity createAccount(@RequestBody UserRequest userRequest){
+    public ResponseEntity<BankResponse> createAccount(@RequestBody UserRequest userRequest){
         BankResponse response= userService.createUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
